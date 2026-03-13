@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kome Driver">
+    <title>Kome — Repartidor</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUNTpFKdTVDC2N-G1tqP377kWr2iddpA4&libraries=places&loading=async" async defer></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#06300A",
+                        "accent": "#007AFF",
+                        "dark-bg": "#1C1C1E",
+                        "surface": "#1a1a1a",
+                        "light-bg": "#E5E5EA",
+                    },
+                    fontFamily: {
+                        "display": ["Bricolage Grotesque", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"]
+                    }
+                }
+            }
+        };
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') document.documentElement.classList.add('dark');
+            else if (saved === 'light') document.documentElement.classList.remove('dark');
+            else if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
+        })();
+    </script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+        .pulse-ring { animation: pulseRing 2s infinite; }
+        @keyframes pulseRing {
+            0% { box-shadow: 0 0 0 0 rgba(6, 48, 10, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(6, 48, 10, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(6, 48, 10, 0); }
+        }
+        .code-input { letter-spacing: 0.5em; text-transform: uppercase; font-family: 'Bricolage Grotesque', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-light-bg text-gray-900 dark:bg-dark-bg dark:text-white min-h-[100dvh]">
+
+    <!-- ==================== PANTALLA 1: AUTH ==================== -->
+    <div id="screen-auth" class="min-h-[100dvh] flex flex-col items-center justify-center p-6">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-10">
+                <div class="size-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/20">
+                    <span class="material-symbols-rounded text-white text-3xl">delivery_dining</span>
+                </div>
+                <h1 class="text-2xl font-display font-bold mb-1">Kome Driver</h1>
+                <p class="text-gray-500 dark:text-white/50 text-sm">Panel de Repartidores</p>
+            </div>
+
+            <div class="bg-gray-100 dark:bg-white/5 p-1.5 rounded-2xl flex mb-6">
+                <button id="tab-login" onclick="driver.setMode('login')" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all shadow-sm bg-white dark:bg-surface text-gray-900 dark:text-white">Iniciar Sesión</button>
+                <button id="tab-signup" onclick="driver.setMode('signup')" class="flex-1 py-3 rounded-xl text-sm font-bold text-gray-500 dark:text-white/40 transition-all">Registrarse</button>
+            </div>
+
+            <div class="space-y-4">
+                <div id="signup-fields" class="hidden space-y-4">
+                    <input id="reg-name" type="text" placeholder="Nombre completo" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
+                    <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Vehículo</p>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" onclick="driver.pickVehicle('moto')" data-v="moto" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border-2 border-primary bg-primary/5 transition-all active:scale-95"><span class="text-xl">🛵</span><span class="text-[9px] font-bold">Moto</span></button>
+                            <button type="button" onclick="driver.pickVehicle('bicicleta')" data-v="bicicleta" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚲</span><span class="text-[9px] font-bold">Bici</span></button>
+                            <button type="button" onclick="driver.pickVehicle('auto')" data-v="auto" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚗</span><span class="text-[9px] font-bold">Auto</span></button>
+                            <button type="button" onclick="driver.pickVehicle('pie')" data-v="pie" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚶</span><span class="text-[9px] font-bold">A pie</span></button>
+                        </div>
+                    </div>
+                </div>
+                <input id="auth-email" type="email" placeholder="Correo electrónico" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
+                <input id="auth-password" type="password" placeholder="Contraseña" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
+                <button onclick="driver.submitAuth()" id="auth-btn" class="w-full bg-primary text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/20 active:scale-95 transition-all text-sm">Iniciar Sesión</button>
+            </div>
+            <p id="auth-error" class="text-red-500 text-xs font-bold text-center mt-4 hidden"></p>
+        </div>
+    </div>
+
+    <!-- ==================== PANTALLA 2: DASHBOARD ==================== -->
+    <div id="screen-dashboard" class="hidden min-h-[100dvh] flex flex-col">
+
+        <!-- Header -->
+        <header class="sticky top-0 z-40 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/5">
+            <div class="max-w-lg mx-auto px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="size-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md">
+                        <span class="material-symbols-rounded text-xl">delivery_dining</span>
+                    </div>
+                    <div>
+                        <h2 id="driver-name" class="text-sm font-bold">Repartidor</h2>
+                        <p id="driver-status-text" class="text-[10px] font-bold text-green-500 uppercase tracking-widest">Disponible</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div id="header-order-count" class="hidden bg-accent text-white text-xs font-black px-2.5 py-1 rounded-lg">0</div>
+                    <button onclick="driver.logout()" class="size-10 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-transform">
+                        <span class="material-symbols-rounded">logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-lg mx-auto w-full px-5 py-6 space-y-6">
+
+            <!-- GPS Banner (fijo arriba cuando está activo) -->
+            <div id="gps-banner" class="hidden bg-primary text-white px-5 py-3 rounded-2xl flex items-center justify-between shadow-lg shadow-primary/20">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-rounded animate-pulse">my_location</span>
+                    <span class="text-xs font-bold uppercase tracking-wider">GPS Activo</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="gps-timer" class="text-sm font-display font-black">0:00</span>
+                    <button onclick="driver.stopTracking()" class="size-8 bg-white/20 rounded-lg flex items-center justify-center active:scale-90 transition-transform">
+                        <span class="material-symbols-rounded text-sm">stop</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== Ingresar Código ===== -->
+            <section id="code-section" class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-3xl p-5 shadow-xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 size-32 bg-primary/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="size-9 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0">
+                            <span class="material-symbols-rounded text-lg">qr_code_scanner</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm">Agregar Pedido</h3>
+                            <p class="text-[10px] text-gray-400">Código que te da el cajero</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <input id="order-code-input" type="text" maxlength="5" placeholder="A0EE"
+                            class="code-input flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl py-3.5 px-5 text-xl font-display font-black text-center focus:ring-0 focus:border-primary outline-none uppercase"
+                            oninput="this.value = this.value.toUpperCase()"
+                            onkeydown="if(event.key==='Enter') driver.lookupOrder()">
+                        <button onclick="driver.lookupOrder()" id="btn-lookup"
+                            class="bg-primary text-white font-bold px-5 rounded-2xl shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center">
+                            <span class="material-symbols-rounded text-xl">add</span>
+                        </button>
+                    </div>
+                    <p id="lookup-error" class="text-red-500 text-xs font-bold text-center mt-3 hidden"></p>
+                </div>
+            </section>
+
+            <!-- ===== Mapa con TODOS los destinos ===== -->
+            <section id="map-section" class="hidden">
+                <div class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-3xl overflow-hidden shadow-xl">
+                    <div id="delivery-map" class="w-full h-56 bg-gray-100 dark:bg-gray-800"></div>
+                    <div class="px-5 py-3 flex items-center justify-between">
+                        <p id="map-summary" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">0 entregas</p>
+                        <button onclick="driver.startTracking()" id="btn-start-gps"
+                            class="bg-primary text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center gap-1.5">
+                            <span class="material-symbols-rounded text-base">play_arrow</span>
+                            Iniciar GPS
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Lista de Pedidos Activos ===== -->
+            <section id="orders-section" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-display font-bold text-gray-500 dark:text-white/40 uppercase tracking-widest">Pedidos en Ruta</h3>
+                    <span id="active-count" class="bg-accent/10 text-accent text-[10px] font-black px-2 py-1 rounded-lg">0</span>
+                </div>
+                <div id="orders-list" class="space-y-4">
+                    <!-- Renderizado dinámico -->
+                </div>
+            </section>
+
+            <!-- ===== Historial de hoy ===== -->
+            <section>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-display font-bold text-gray-400 uppercase tracking-widest">Entregas de Hoy</h3>
+                    <span id="today-count" class="bg-gray-100 dark:bg-white/5 text-gray-400 text-[10px] font-black px-2 py-1 rounded-lg">0</span>
+                </div>
+                <div id="today-deliveries" class="space-y-3">
+                    <p class="text-center text-gray-300 dark:text-white/20 text-xs py-6">Sin entregas aún</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-surface shadow-2xl rounded-2xl px-5 py-4 flex items-center gap-3 transition-all duration-300 opacity-0 -translate-y-8 pointer-events-none max-w-sm w-full border border-gray-100 dark:border-white/5">
+        <span id="toast-icon" class="material-symbols-rounded text-primary text-xl">check_circle</span>
+        <p id="toast-text" class="text-sm font-bold flex-1">Mensaje</p>
+    </div>
+
+<script>
+const SUPABASE_URL = 'https://gwalgqvxloqqtbahfuux.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3YWxncXZ4bG9xcXRiYWhmdXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxOTc2MzAsImV4cCI6MjA4ODc3MzYzMH0.IzMZebdFJGpSyCpBsOUFSmUigvTGQOV3Iu20RiuNYgo';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Colores para marcadores de cada pedido
+const PIN_COLORS = ['#06300A', '#007AFF', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+
+const driver = {
+    profile: null,
+    orders: [],             // Array de pedidos activos
+    isTracking: false,
+    watchId: null,
+    sendInterval: null,
+    timerInterval: null,
+    timerStart: null,
+    lastPos: null,
+    map: null,
+    markers: {},            // { orderId: google.maps.Marker }
+    driverMarker: null,
+    isLoginMode: true,
+    vehicle: 'moto',
+
+    // ======================== AUTH ========================
+
+    setMode(mode) {
+        this.isLoginMode = (mode === 'login');
+        document.getElementById('auth-error').classList.add('hidden');
+        const active = 'flex-1 py-3 rounded-xl text-sm font-bold transition-all shadow-sm bg-white dark:bg-surface text-gray-900 dark:text-white';
+        const inactive = 'flex-1 py-3 rounded-xl text-sm font-bold text-gray-500 dark:text-white/40 transition-all';
+        document.getElementById('tab-login').className = this.isLoginMode ? active : inactive;
+        document.getElementById('tab-signup').className = this.isLoginMode ? inactive : active;
+        document.getElementById('signup-fields').classList.toggle('hidden', this.isLoginMode);
+        document.getElementById('auth-btn').textContent = this.isLoginMode ? 'Iniciar Sesión' : 'Crear Cuenta';
+    },
+
+    pickVehicle(v) {
+        this.vehicle = v;
+        document.querySelectorAll('.vbtn').forEach(b => {
+            b.className = b.dataset.v === v
+                ? 'vbtn flex flex-col items-center gap-1 py-3 rounded-xl border-2 border-primary bg-primary/5 transition-all active:scale-95'
+                : 'vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95';
+        });
+    },
+
+    showError(msg) { const el = document.getElementById('auth-error'); el.textContent = msg; el.classList.remove('hidden'); },
+
+    async submitAuth() { this.isLoginMode ? await this.login() : await this.register(); },
+
+    async login() {
+        const email = document.getElementById('auth-email').value.trim();
+        const pwd = document.getElementById('auth-password').value;
+        const btn = document.getElementById('auth-btn');
+        if (!email || !pwd) return this.showError('Completa todos los campos');
+        btn.disabled = true; btn.textContent = 'Ingresando...';
+        try {
+            const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
+            if (error) throw error;
+            const { data: d } = await sb.from('repartidores').select('*').eq('user_id', data.user.id).single();
+            if (!d) throw new Error('Esta cuenta no es de repartidor. Regístrate primero.');
+            this.profile = d;
+            this.openDashboard();
+        } catch (e) {
+            this.showError(e.message?.includes('Invalid login') ? 'Correo o contraseña incorrectos.' : e.message);
+        } finally { btn.disabled = false; btn.textContent = 'Iniciar Sesión'; }
+    },
+
+    async register() {
+        const name = document.getElementById('reg-name').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const email = document.getElementById('auth-email').value.trim();
+        const pwd = document.getElementById('auth-password').value;
+        const btn = document.getElementById('auth-btn');
+        if (!name || !phone || !email || !pwd) return this.showError('Completa todos los campos');
+        if (pwd.length < 6) return this.showError('Mínimo 6 caracteres en la contraseña');
+        btn.disabled = true; btn.textContent = 'Creando cuenta...';
+        try {
+            const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pwd, options: { data: { full_name: name, phone, role: 'driver' } } });
+            if (authErr) throw authErr;
+            if (!auth.user) throw new Error('Error al crear cuenta.');
+            const { data: d, error: dErr } = await sb.from('repartidores').insert({ user_id: auth.user.id, nombre: name, telefono: phone, vehiculo: this.vehicle, activo: true, disponible: true }).select().single();
+            if (dErr) throw new Error('Cuenta creada pero falló el perfil. Contacta al admin.');
+            this.profile = d;
+            this.toast('¡Bienvenido ' + name + '!');
+            this.openDashboard();
+        } catch (e) {
+            this.showError(e.message?.includes('already registered') ? 'Correo ya registrado. Usa "Iniciar Sesión".' : e.message);
+        } finally { btn.disabled = false; btn.textContent = 'Crear Cuenta'; }
+    },
+
+    async logout() {
+        this.stopTracking();
+        await sb.auth.signOut();
+        this.profile = null; this.orders = [];
+        document.getElementById('screen-auth').classList.remove('hidden');
+        document.getElementById('screen-dashboard').classList.add('hidden');
+        this.setMode('login');
+    },
+
+    // ======================== DASHBOARD ========================
+
+    openDashboard() {
+        document.getElementById('screen-auth').classList.add('hidden');
+        document.getElementById('screen-dashboard').classList.remove('hidden');
+        document.getElementById('driver-name').textContent = this.profile.nombre;
+        this.loadActiveOrders();
+        this.loadTodayDeliveries();
+    },
+
+    async loadActiveOrders() {
+        const { data } = await sb.from('pedidos').select('*')
+            .eq('repartidor_id', this.profile.id)
+            .eq('estado', 'en camino')
+            .order('created_at', { ascending: true });
+
+        if (data && data.length > 0) {
+            this.orders = data;
+            this.renderAll();
+            if (!this.isTracking) this.startTracking();
+        }
+    },
+
+    // ======================== AGREGAR PEDIDO POR CÓDIGO ========================
+
+    async lookupOrder() {
+        const input = document.getElementById('order-code-input');
+        const code = input.value.trim().toLowerCase();
+        const err = document.getElementById('lookup-error');
+        err.classList.add('hidden');
+
+        if (code.length < 3) { err.textContent = 'Mínimo 3 caracteres'; err.classList.remove('hidden'); return; }
+
+        // No duplicar
+        if (this.orders.find(o => o.id.toLowerCase().startsWith(code))) {
+            err.textContent = 'Ya tienes este pedido cargado';
+            err.classList.remove('hidden');
+            return;
+        }
+
+        const btn = document.getElementById('btn-lookup');
+        btn.disabled = true;
+
+        try {
+            const { data, error } = await sb.from('pedidos').select('*')
+                .or('estado.eq.listo,estado.eq.en camino')
+                .order('created_at', { ascending: false });
+            if (error) throw error;
+
+            const match = (data || []).find(o => o.id.toLowerCase().startsWith(code));
+            if (!match) { err.textContent = `Pedido "${code.toUpperCase()}" no encontrado`; err.classList.remove('hidden'); return; }
+            if (match.repartidor_id && match.repartidor_id !== this.profile.id) { err.textContent = 'Pedido tomado por otro repartidor'; err.classList.remove('hidden'); return; }
+
+            // Asignarme
+            await sb.from('pedidos').update({
+                repartidor_id: this.profile.id,
+                tracking_activo: true,
+                estado: 'en camino'
+            }).eq('id', match.id);
+
+            match.estado = 'en camino';
+            match.repartidor_id = this.profile.id;
+            this.orders.push(match);
+
+            this.renderAll();
+            this.toast(`Pedido #${match.id.slice(0,4).toUpperCase()} agregado`);
+            input.value = '';
+
+            // Iniciar GPS si es el primer pedido
+            if (this.orders.length === 1 && !this.isTracking) this.startTracking();
+
+        } catch (e) { console.error(e); err.textContent = 'Error al buscar'; err.classList.remove('hidden'); }
+        finally { btn.disabled = false; }
+    },
+
+    // ======================== RENDER ========================
+
+    renderAll() {
+        this.renderOrdersList();
+        this.renderMap();
+        this.updateHeader();
+    },
+
+    updateHeader() {
+        const n = this.orders.length;
+        const status = document.getElementById('driver-status-text');
+        const badge = document.getElementById('header-order-count');
+        const startBtn = document.getElementById('btn-start-gps');
+
+        if (n > 0) {
+            status.textContent = `${n} entrega${n > 1 ? 's' : ''} activa${n > 1 ? 's' : ''}`;
+            status.className = 'text-[10px] font-bold text-accent uppercase tracking-widest';
+            badge.textContent = n;
+            badge.classList.remove('hidden');
+            document.getElementById('map-section').classList.remove('hidden');
+            document.getElementById('orders-section').classList.remove('hidden');
+            document.getElementById('active-count').textContent = n;
+            document.getElementById('map-summary').textContent = `${n} entrega${n > 1 ? 's' : ''} · ${this.isTracking ? 'GPS activo' : 'GPS inactivo'}`;
+            if (startBtn) startBtn.classList.toggle('hidden', this.isTracking);
+        } else {
+            status.textContent = 'Disponible';
+            status.className = 'text-[10px] font-bold text-green-500 uppercase tracking-widest';
+            badge.classList.add('hidden');
+            document.getElementById('map-section').classList.add('hidden');
+            document.getElementById('orders-section').classList.add('hidden');
+        }
+    },
+
+    renderOrdersList() {
+        const container = document.getElementById('orders-list');
+        if (!container) return;
+
+        container.innerHTML = this.orders.map((o, idx) => {
+            const color = PIN_COLORS[idx % PIN_COLORS.length];
+            const code = o.id.slice(0, 4).toUpperCase();
+            const mapsLink = (o.latitud && o.longitud)
+                ? `https://www.google.com/maps/dir/?api=1&destination=${o.latitud},${o.longitud}&travelmode=driving`
+                : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.direccion)}`;
+            const waLink = o.cliente_telefono ? `https://wa.me/1${o.cliente_telefono.replace(/\D/g, '')}` : '';
+
+            return `
+            <div class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-2xl overflow-hidden shadow-lg">
+                <!-- Header con color del pin -->
+                <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-50 dark:border-white/5" style="border-left: 4px solid ${color}">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-display font-black text-lg">#${code}</span>
+                            <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-100 text-purple-600">${o.estado}</span>
+                        </div>
+                        <p class="text-xs font-bold text-gray-600 dark:text-white/60 truncate">${o.cliente_nombre || 'Cliente'}</p>
+                    </div>
+                    <span class="font-display font-black text-lg text-gray-900 dark:text-white shrink-0">RD$${o.total}</span>
+                </div>
+
+                <!-- Dirección -->
+                <div class="px-4 py-3">
+                    <div class="flex items-start gap-2 mb-2">
+                        <span class="material-symbols-rounded text-sm mt-0.5" style="color: ${color}">location_on</span>
+                        <p class="text-xs text-gray-600 dark:text-white/50 leading-relaxed flex-1">${o.direccion || 'Sin dirección'}</p>
+                    </div>
+                    <p class="text-[10px] text-gray-400 font-bold">${o.metodo_pago || 'Efectivo'}</p>
+
+                    <!-- Items colapsados -->
+                    <details class="mt-2 group">
+                        <summary class="text-[10px] font-bold text-gray-400 cursor-pointer flex items-center gap-1">
+                            <span class="material-symbols-rounded text-xs transition-transform group-open:rotate-90">chevron_right</span>
+                            ${(o.items || []).length} productos
+                        </summary>
+                        <div class="mt-1 space-y-0.5 pt-1 border-t border-dashed border-gray-100 dark:border-white/5">
+                            ${(o.items || []).map(i => `<p class="text-[11px] text-gray-500"><b>${i.qty}x</b> ${i.nombre}</p>`).join('')}
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Acciones -->
+                <div class="flex border-t border-gray-50 dark:border-white/5 divide-x divide-gray-50 dark:divide-white/5">
+                    <a href="${mapsLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-accent text-xs font-bold active:bg-accent/5 transition-colors">
+                        <span class="material-symbols-rounded text-base">navigation</span> Navegar
+                    </a>
+                    ${waLink ? `<a href="${waLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-green-600 text-xs font-bold active:bg-green-50 transition-colors">
+                        <span class="material-symbols-rounded text-base">chat</span> WhatsApp
+                    </a>` : ''}
+                    <button onclick="driver.markDelivered('${o.id}')" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-green-600 text-xs font-bold active:bg-green-50 transition-colors">
+                        <span class="material-symbols-rounded text-base">check_circle</span> Entregado
+                    </button>
+                    <button onclick="driver.dropOrder('${o.id}')" class="px-3 flex items-center justify-center py-3 text-gray-400 active:text-red-500 transition-colors">
+                        <span class="material-symbols-rounded text-base">close</span>
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+    },
+
+    // ======================== MAPA ========================
+
+    renderMap() {
+        const container = document.getElementById('delivery-map');
+        if (!container || typeof google === 'undefined' || this.orders.length === 0) return;
+
+        // Crear mapa si no existe
+        if (!this.map) {
+            this.map = new google.maps.Map(container, {
+                center: { lat: 19.2945, lng: -70.2535 },
+                zoom: 14,
+                disableDefaultUI: true,
+                zoomControl: true,
+                gestureHandling: 'greedy',
+                styles: [
+                    { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                    { featureType: "transit", stylers: [{ visibility: "off" }] }
+                ]
+            });
+        }
+
+        // Limpiar marcadores viejos de pedidos que ya no están
+        Object.keys(this.markers).forEach(id => {
+            if (!this.orders.find(o => o.id === id)) {
+                this.markers[id].setMap(null);
+                delete this.markers[id];
+            }
+        });
+
+        const bounds = new google.maps.LatLngBounds();
+
+        // Agregar/actualizar marcadores
+        this.orders.forEach((o, idx) => {
+            const lat = o.latitud || 19.2945;
+            const lng = o.longitud || -70.2535;
+            const pos = { lat, lng };
+            const color = PIN_COLORS[idx % PIN_COLORS.length];
+            const code = o.id.slice(0, 4).toUpperCase();
+
+            if (!this.markers[o.id]) {
+                this.markers[o.id] = new google.maps.Marker({
+                    position: pos,
+                    map: this.map,
+                    icon: {
+                        url: `data:image/svg+xml,${encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 36 44">
+                                <path d="M18 0C8 0 0 8 0 18c0 14 18 26 18 26s18-12 18-26C36 8 28 0 18 0z" fill="${color}"/>
+                                <circle cx="18" cy="17" r="8" fill="white"/>
+                                <text x="18" y="21" text-anchor="middle" font-size="10" font-weight="bold" fill="${color}" font-family="sans-serif">${idx + 1}</text>
+                            </svg>`)}`,
+                        scaledSize: new google.maps.Size(36, 44),
+                        anchor: new google.maps.Point(18, 44)
+                    },
+                    title: `#${code} — ${o.cliente_nombre || 'Cliente'}`
+                });
+            }
+
+            bounds.extend(pos);
+        });
+
+        // Incluir posición del driver si la tenemos
+        if (this.lastPos) {
+            bounds.extend({ lat: this.lastPos.lat, lng: this.lastPos.lng });
+        }
+
+        if (this.orders.length === 1 && !this.lastPos) {
+            this.map.setCenter(bounds.getCenter());
+            this.map.setZoom(15);
+        } else {
+            this.map.fitBounds(bounds, { top: 30, bottom: 30, left: 30, right: 30 });
+        }
+    },
+
+    updateDriverOnMap() {
+        if (!this.map || !this.lastPos) return;
+        const pos = { lat: this.lastPos.lat, lng: this.lastPos.lng };
+
+        if (!this.driverMarker) {
+            this.driverMarker = new google.maps.Marker({
+                position: pos, map: this.map,
+                icon: {
+                    url: `data:image/svg+xml,${encodeURIComponent(`
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <circle cx="20" cy="20" r="18" fill="%23007AFF" stroke="white" stroke-width="3"/>
+                            <text x="20" y="28" text-anchor="middle" font-size="20">🛵</text>
+                        </svg>`)}`,
+                    scaledSize: new google.maps.Size(40, 40),
+                    anchor: new google.maps.Point(20, 20)
+                },
+                title: 'Tú', zIndex: 999
+            });
+        } else {
+            this.driverMarker.setPosition(pos);
+        }
+    },
+
+    // ======================== GPS TRACKING ========================
+
+    startTracking() {
+        if (this.orders.length === 0) return this.toast('No hay pedidos', 'error');
+        if (!navigator.geolocation) return this.toast('GPS no disponible', 'error');
+        if (this.isTracking) return;
+
+        this.isTracking = true;
+        document.getElementById('gps-banner').classList.remove('hidden');
+
+        // Timer
+        this.timerStart = Date.now();
+        this.timerInterval = setInterval(() => {
+            const s = Math.floor((Date.now() - this.timerStart) / 1000);
+            document.getElementById('gps-timer').textContent = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+        }, 1000);
+
+        // watchPosition
+        this.watchId = navigator.geolocation.watchPosition(
+            pos => {
+                this.lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude, bearing: pos.coords.heading || 0, speed: pos.coords.speed ? pos.coords.speed * 3.6 : 0 };
+                this.updateDriverOnMap();
+            },
+            err => { if (err.code === 1) { this.toast('Permiso GPS denegado', 'error'); this.stopTracking(); } },
+            { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 }
+        );
+
+        // Enviar ubicación para TODOS los pedidos cada 6 seg
+        this.sendInterval = setInterval(() => this.broadcastLocation(), 6000);
+
+        // Primera posición
+        navigator.geolocation.getCurrentPosition(
+            pos => { this.lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude, bearing: 0, speed: 0 }; this.broadcastLocation(); this.updateDriverOnMap(); },
+            () => {}, { enableHighAccuracy: true }
+        );
+
+        this.updateHeader();
+        this.toast('🛵 GPS activado');
+    },
+
+    stopTracking() {
+        this.isTracking = false;
+        if (this.watchId !== null) { navigator.geolocation.clearWatch(this.watchId); this.watchId = null; }
+        if (this.sendInterval) { clearInterval(this.sendInterval); this.sendInterval = null; }
+        if (this.timerInterval) { clearInterval(this.timerInterval); this.timerInterval = null; }
+        document.getElementById('gps-banner').classList.add('hidden');
+        if (this.driverMarker) { this.driverMarker.setMap(null); this.driverMarker = null; }
+        this.updateHeader();
+    },
+
+    // Enviar ubicación a TODOS los pedidos activos simultáneamente
+    async broadcastLocation() {
+        if (!this.lastPos || !this.isTracking || this.orders.length === 0) return;
+
+        const rows = this.orders.map(o => ({
+            pedido_id: o.id,
+            repartidor_id: this.profile.id,
+            latitud: this.lastPos.lat,
+            longitud: this.lastPos.lng,
+            bearing: this.lastPos.bearing,
+            velocidad: this.lastPos.speed
+        }));
+
+        try {
+            await sb.from('tracking_ubicaciones').insert(rows);
+        } catch (e) { console.error('Error GPS broadcast:', e); }
+    },
+
+    // ======================== ENTREGADO / SOLTAR ========================
+
+    async markDelivered(orderId) {
+        try {
+            await sb.from('pedidos').update({
+                estado: 'entregado', tracking_activo: false, entregado_at: new Date().toISOString()
+            }).eq('id', orderId);
+
+            this.orders = this.orders.filter(o => o.id !== orderId);
+
+            // Limpiar marcador del mapa
+            if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
+
+            this.toast('✅ Entrega completada');
+
+            if (this.orders.length === 0) {
+                this.stopTracking();
+                await sb.from('repartidores').update({ disponible: true }).eq('id', this.profile.id);
+            }
+
+            this.renderAll();
+            this.loadTodayDeliveries();
+        } catch (e) { console.error(e); this.toast('Error al entregar', 'error'); }
+    },
+
+    async dropOrder(orderId) {
+        await sb.from('pedidos').update({
+            estado: 'listo', repartidor_id: null, tracking_activo: false
+        }).eq('id', orderId);
+
+        this.orders = this.orders.filter(o => o.id !== orderId);
+        if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
+
+        if (this.orders.length === 0) this.stopTracking();
+
+        this.renderAll();
+        this.toast('Pedido liberado');
+    },
+
+    // ======================== HISTORIAL ========================
+
+    async loadTodayDeliveries() {
+        const container = document.getElementById('today-deliveries');
+        const countEl = document.getElementById('today-count');
+        const today = new Date().toISOString().split('T')[0];
+
+        const { data } = await sb.from('pedidos').select('*')
+            .eq('repartidor_id', this.profile.id).eq('estado', 'entregado')
+            .gte('entregado_at', today).order('entregado_at', { ascending: false });
+
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-300 dark:text-white/20 text-xs py-6">Sin entregas aún</p>';
+            if (countEl) countEl.textContent = '0';
+            return;
+        }
+        if (countEl) countEl.textContent = data.length;
+
+        container.innerHTML = data.map(o => `
+            <div class="flex items-center gap-3 bg-green-50 dark:bg-green-500/5 p-3 rounded-xl border border-green-100 dark:border-green-500/10">
+                <span class="material-symbols-rounded text-green-500">check_circle</span>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold truncate">#${o.id.slice(0,4).toUpperCase()} — ${o.cliente_nombre || 'Cliente'}</p>
+                    <p class="text-[10px] text-gray-400">${new Date(o.entregado_at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</p>
+                </div>
+                <span class="font-bold text-sm text-green-600 shrink-0">RD$${o.total}</span>
+            </div>
+        `).join('');
+    },
+
+    // ======================== UTILS ========================
+
+    toast(text, type = 'success') {
+        const t = document.getElementById('toast');
+        document.getElementById('toast-text').textContent = text;
+        const icon = document.getElementById('toast-icon');
+        icon.textContent = type === 'error' ? 'error' : 'check_circle';
+        icon.className = `material-symbols-rounded text-xl ${type === 'error' ? 'text-red-500' : 'text-primary'}`;
+        t.classList.remove('opacity-0', '-translate-y-8', 'pointer-events-none');
+        setTimeout(() => t.classList.add('opacity-0', '-translate-y-8', 'pointer-events-none'), 3000);
+    },
+
+    // ======================== AUTO-INIT ========================
+
+    async init() {
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) return;
+        const { data: d } = await sb.from('repartidores').select('*').eq('user_id', session.user.id).single();
+        if (d) { this.profile = d; this.openDashboard(); }
+    }
+};
+
+window.driver = driver;
+document.addEventListener('DOMContentLoaded', () => driver.init());
+</script>
+</body>
+</html>
