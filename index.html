@@ -86,11 +86,6 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
         
-        /* M3 Input styling utilities */
-        .m3-input {
-            @apply w-full h-[56px] bg-surface dark:bg-dark-surface border border-outline dark:border-dark-outline rounded-[16px] px-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-colors focus:ring-0 focus:border-primary dark:focus:border-dark-primary focus:border-2 outline-none placeholder:text-outline dark:placeholder:text-dark-outline;
-        }
-
         /* Material Symbols Fill adjustments */
         .material-symbols-rounded {
           font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -122,8 +117,21 @@
 
             <div class="space-y-4">
                 <div id="signup-fields" class="hidden space-y-4">
-                    <input id="reg-name" type="text" placeholder="Nombre completo" class="m3-input">
-                    <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="m3-input">
+                    <!-- Nombre -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">badge</span>
+                        </div>
+                        <input id="reg-name" type="text" placeholder="Nombre completo" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
+                    </div>
+                    
+                    <!-- Teléfono -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">call</span>
+                        </div>
+                        <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
+                    </div>
                     
                     <div class="pt-2">
                         <p class="text-xs font-bold text-outline dark:text-dark-outline uppercase tracking-wider mb-3 ml-2">Tipo de Vehículo</p>
@@ -144,8 +152,21 @@
                     </div>
                 </div>
                 
-                <input id="auth-email" type="email" placeholder="Correo electrónico" class="m3-input">
-                <input id="auth-password" type="password" placeholder="Contraseña" class="m3-input">
+                <!-- Correo -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">mail</span>
+                    </div>
+                    <input id="auth-email" type="email" placeholder="Correo electrónico" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
+                </div>
+                
+                <!-- Contraseña -->
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">lock</span>
+                    </div>
+                    <input id="auth-password" type="password" placeholder="Contraseña" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
+                </div>
                 
                 <div class="pt-4">
                     <button onclick="driver.submitAuth()" id="auth-btn" class="w-full h-[56px] bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary font-bold rounded-full shadow-m3-elevation-1 active:scale-95 transition-all text-base flex items-center justify-center gap-2">
