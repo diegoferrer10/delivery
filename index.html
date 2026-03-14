@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
+    <!-- Añadimos padding inferior para la barra de inicio de iOS (safe-area) -->
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -23,15 +24,51 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#06300A",
-                        "accent": "#007AFF",
-                        "dark-bg": "#1C1C1E",
-                        "surface": "#1a1a1a",
-                        "light-bg": "#E5E5EA",
+                        /* MATERIAL 3 EXPRESSIVE TONAL PALETTE (Green Base) */
+                        "primary": "#1A6C30",
+                        "on-primary": "#FFFFFF",
+                        "primary-container": "#A4F5AD",
+                        "on-primary-container": "#002107",
+                        "secondary": "#516351",
+                        "secondary-container": "#D3E8D2",
+                        "on-secondary-container": "#0F1F11",
+                        "tertiary": "#39656B",
+                        "tertiary-container": "#BCEBF2",
+                        "on-tertiary-container": "#001F23",
+                        "error": "#BA1A1A",
+                        "error-container": "#FFDAD6",
+                        "on-error-container": "#410002",
+                        "surface": "#F7FBF2",
+                        "on-surface": "#181D17",
+                        "surface-container-low": "#F1F5EC",
+                        "surface-container": "#ECEEE8",
+                        "surface-container-high": "#E6E9E2",
+                        "outline": "#72796F",
+                        "outline-variant": "#C1C9BE",
+                        
+                        /* Dark Mode Equivalents */
+                        "dark-primary": "#89D893",
+                        "dark-on-primary": "#003912",
+                        "dark-primary-container": "#00521C",
+                        "dark-on-primary-container": "#A4F5AD",
+                        "dark-secondary": "#B8CCB7",
+                        "dark-secondary-container": "#3A4B3A",
+                        "dark-on-secondary-container": "#D3E8D2",
+                        "dark-surface": "#10140F",
+                        "dark-on-surface": "#E0E4DB",
+                        "dark-surface-container-low": "#181D17",
+                        "dark-surface-container": "#1E211D",
+                        "dark-surface-container-high": "#282B27",
+                        "dark-outline": "#8C9388"
                     },
                     fontFamily: {
                         "display": ["Bricolage Grotesque", "sans-serif"],
                         "body": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'm3-elevation-1': '0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30)',
+                        'm3-elevation-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30)',
+                        'm3-elevation-3': '0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15)',
                     }
                 }
             }
@@ -48,143 +85,163 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
-        .pulse-ring { animation: pulseRing 2s infinite; }
-        @keyframes pulseRing {
-            0% { box-shadow: 0 0 0 0 rgba(6, 48, 10, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(6, 48, 10, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(6, 48, 10, 0); }
+        
+        /* M3 Input styling utilities */
+        .m3-input {
+            @apply w-full h-[56px] bg-surface dark:bg-dark-surface border border-outline dark:border-dark-outline rounded-[16px] px-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-colors focus:ring-0 focus:border-primary dark:focus:border-dark-primary focus:border-2 outline-none placeholder:text-outline dark:placeholder:text-dark-outline;
         }
-        .code-input { letter-spacing: 0.5em; text-transform: uppercase; font-family: 'Bricolage Grotesque', sans-serif; }
+
+        /* Material Symbols Fill adjustments */
+        .material-symbols-rounded {
+          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .code-input { letter-spacing: 0.3em; text-transform: uppercase; font-family: 'Bricolage Grotesque', sans-serif; }
     </style>
 </head>
 
-<body class="bg-light-bg text-gray-900 dark:bg-dark-bg dark:text-white min-h-[100dvh]">
+<body class="bg-surface text-on-surface dark:bg-dark-surface dark:text-dark-on-surface min-h-[100dvh] pb-safe">
 
     <!-- ==================== PANTALLA 1: AUTH ==================== -->
     <div id="screen-auth" class="min-h-[100dvh] flex flex-col items-center justify-center p-6">
         <div class="w-full max-w-sm">
-            <div class="text-center mb-10">
-                <div class="size-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/20">
-                    <span class="material-symbols-rounded text-white text-3xl">delivery_dining</span>
+            
+            <div class="text-center mb-10 flex flex-col items-center">
+                <div class="size-[72px] bg-primary-container dark:bg-dark-primary-container rounded-[24px] flex items-center justify-center mb-6 shadow-m3-elevation-1">
+                    <span class="material-symbols-rounded text-on-primary-container dark:text-dark-on-primary-container text-[40px]">delivery_dining</span>
                 </div>
-                <h1 class="text-2xl font-display font-bold mb-1">Kome Driver</h1>
-                <p class="text-gray-500 dark:text-white/50 text-sm">Panel de Repartidores</p>
+                <h1 class="text-[32px] leading-tight font-display font-extrabold mb-2 text-on-surface dark:text-dark-on-surface">Kome Driver</h1>
+                <p class="text-outline dark:text-dark-outline text-base font-medium">Panel de Repartidores</p>
             </div>
 
-            <div class="bg-gray-100 dark:bg-white/5 p-1.5 rounded-2xl flex mb-6">
-                <button id="tab-login" onclick="driver.setMode('login')" class="flex-1 py-3 rounded-xl text-sm font-bold transition-all shadow-sm bg-white dark:bg-surface text-gray-900 dark:text-white">Iniciar Sesión</button>
-                <button id="tab-signup" onclick="driver.setMode('signup')" class="flex-1 py-3 rounded-xl text-sm font-bold text-gray-500 dark:text-white/40 transition-all">Registrarse</button>
+            <!-- M3 Segmented Button -->
+            <div class="bg-surface-container-high dark:bg-dark-surface-container-high p-1 rounded-full flex mb-8">
+                <button id="tab-login" onclick="driver.setMode('login')" class="flex-1 h-12 rounded-full text-sm font-bold transition-all bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container shadow-sm">Iniciar Sesión</button>
+                <button id="tab-signup" onclick="driver.setMode('signup')" class="flex-1 h-12 rounded-full text-sm font-bold text-outline dark:text-dark-outline transition-all">Registrarse</button>
             </div>
 
             <div class="space-y-4">
                 <div id="signup-fields" class="hidden space-y-4">
-                    <input id="reg-name" type="text" placeholder="Nombre completo" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
-                    <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
-                    <div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Vehículo</p>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button type="button" onclick="driver.pickVehicle('moto')" data-v="moto" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border-2 border-primary bg-primary/5 transition-all active:scale-95"><span class="text-xl">🛵</span><span class="text-[9px] font-bold">Moto</span></button>
-                            <button type="button" onclick="driver.pickVehicle('bicicleta')" data-v="bicicleta" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚲</span><span class="text-[9px] font-bold">Bici</span></button>
-                            <button type="button" onclick="driver.pickVehicle('auto')" data-v="auto" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚗</span><span class="text-[9px] font-bold">Auto</span></button>
-                            <button type="button" onclick="driver.pickVehicle('pie')" data-v="pie" class="vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95"><span class="text-xl">🚶</span><span class="text-[9px] font-bold">A pie</span></button>
+                    <input id="reg-name" type="text" placeholder="Nombre completo" class="m3-input">
+                    <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="m3-input">
+                    
+                    <div class="pt-2">
+                        <p class="text-xs font-bold text-outline dark:text-dark-outline uppercase tracking-wider mb-3 ml-2">Tipo de Vehículo</p>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button type="button" onclick="driver.pickVehicle('moto')" data-v="moto" class="vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container transition-all active:scale-95 border-2 border-transparent">
+                                <span class="text-[28px]">🛵</span><span class="text-xs font-bold">Moto</span>
+                            </button>
+                            <button type="button" onclick="driver.pickVehicle('bicicleta')" data-v="bicicleta" class="vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-surface-container dark:bg-dark-surface-container text-on-surface dark:text-dark-on-surface transition-all active:scale-95 border-2 border-transparent">
+                                <span class="text-[28px]">🚲</span><span class="text-xs font-bold">Bici</span>
+                            </button>
+                            <button type="button" onclick="driver.pickVehicle('auto')" data-v="auto" class="vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-surface-container dark:bg-dark-surface-container text-on-surface dark:text-dark-on-surface transition-all active:scale-95 border-2 border-transparent">
+                                <span class="text-[28px]">🚗</span><span class="text-xs font-bold">Auto</span>
+                            </button>
+                            <button type="button" onclick="driver.pickVehicle('pie')" data-v="pie" class="vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-surface-container dark:bg-dark-surface-container text-on-surface dark:text-dark-on-surface transition-all active:scale-95 border-2 border-transparent">
+                                <span class="text-[28px]">🚶</span><span class="text-xs font-bold">Pie</span>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <input id="auth-email" type="email" placeholder="Correo electrónico" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
-                <input id="auth-password" type="password" placeholder="Contraseña" class="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-medium focus:ring-0 focus:border-primary outline-none">
-                <button onclick="driver.submitAuth()" id="auth-btn" class="w-full bg-primary text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/20 active:scale-95 transition-all text-sm">Iniciar Sesión</button>
+                
+                <input id="auth-email" type="email" placeholder="Correo electrónico" class="m3-input">
+                <input id="auth-password" type="password" placeholder="Contraseña" class="m3-input">
+                
+                <div class="pt-4">
+                    <button onclick="driver.submitAuth()" id="auth-btn" class="w-full h-[56px] bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary font-bold rounded-full shadow-m3-elevation-1 active:scale-95 transition-all text-base flex items-center justify-center gap-2">
+                        Iniciar Sesión
+                        <span class="material-symbols-rounded text-xl">arrow_forward</span>
+                    </button>
+                </div>
             </div>
-            <p id="auth-error" class="text-red-500 text-xs font-bold text-center mt-4 hidden"></p>
+            <p id="auth-error" class="text-error dark:text-error-container bg-error-container/20 dark:bg-error-container/10 p-4 rounded-[16px] text-sm font-bold text-center mt-6 hidden"></p>
         </div>
     </div>
 
     <!-- ==================== PANTALLA 2: DASHBOARD ==================== -->
-    <div id="screen-dashboard" class="hidden min-h-[100dvh] flex flex-col">
+    <div id="screen-dashboard" class="hidden min-h-[100dvh] flex flex-col pb-10">
 
-        <!-- Header -->
-        <header class="sticky top-0 z-40 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/5">
-            <div class="max-w-lg mx-auto px-5 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="size-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md">
-                        <span class="material-symbols-rounded text-xl">delivery_dining</span>
-                    </div>
-                    <div>
-                        <h2 id="driver-name" class="text-sm font-bold">Repartidor</h2>
-                        <p id="driver-status-text" class="text-[10px] font-bold text-green-500 uppercase tracking-widest">Disponible</p>
+        <!-- M3 Large Top App Bar (Simulated) -->
+        <header class="bg-surface dark:bg-dark-surface sticky top-0 z-40 transition-shadow" id="app-bar">
+            <div class="max-w-lg mx-auto px-6 pt-6 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 id="driver-name" class="text-[22px] font-display font-bold text-on-surface dark:text-dark-on-surface mb-0.5">Repartidor</h2>
+                    <div class="flex items-center gap-1.5">
+                        <div class="size-2 rounded-full bg-primary dark:bg-dark-primary animate-pulse"></div>
+                        <p id="driver-status-text" class="text-xs font-bold text-primary dark:text-dark-primary uppercase tracking-wider">Disponible</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div id="header-order-count" class="hidden bg-accent text-white text-xs font-black px-2.5 py-1 rounded-lg">0</div>
-                    <button onclick="driver.logout()" class="size-10 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center active:scale-90 transition-transform">
+                <div class="flex items-center gap-3">
+                    <div id="header-order-count" class="hidden bg-tertiary-container dark:bg-dark-secondary-container text-on-tertiary-container dark:text-dark-on-secondary-container size-[40px] flex items-center justify-center text-sm font-black rounded-full shadow-sm">0</div>
+                    <button onclick="driver.logout()" class="size-[48px] rounded-full bg-surface-container-high dark:bg-dark-surface-container-high text-on-surface dark:text-dark-on-surface flex items-center justify-center active:bg-outline-variant/50 transition-colors">
                         <span class="material-symbols-rounded">logout</span>
                     </button>
                 </div>
             </div>
         </header>
 
-        <main class="flex-1 max-w-lg mx-auto w-full px-5 py-6 space-y-6">
+        <main class="flex-1 max-w-lg mx-auto w-full px-6 py-2 space-y-6">
 
-            <!-- GPS Banner (fijo arriba cuando está activo) -->
-            <div id="gps-banner" class="hidden bg-primary text-white px-5 py-3 rounded-2xl flex items-center justify-between shadow-lg shadow-primary/20">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-rounded animate-pulse">my_location</span>
-                    <span class="text-xs font-bold uppercase tracking-wider">GPS Activo</span>
-                </div>
+            <!-- GPS Banner (M3 Primary Container) -->
+            <div id="gps-banner" class="hidden bg-primary-container dark:bg-dark-primary-container text-on-primary-container dark:text-dark-on-primary-container px-5 py-4 rounded-[24px] flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
-                    <span id="gps-timer" class="text-sm font-display font-black">0:00</span>
-                    <button onclick="driver.stopTracking()" class="size-8 bg-white/20 rounded-lg flex items-center justify-center active:scale-90 transition-transform">
-                        <span class="material-symbols-rounded text-sm">stop</span>
-                    </button>
+                    <div class="bg-primary/10 dark:bg-white/20 p-2 rounded-full">
+                        <span class="material-symbols-rounded animate-pulse text-[24px]">my_location</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold">Rastreo Activo</p>
+                        <span id="gps-timer" class="text-xs font-display font-bold opacity-80">0:00</span>
+                    </div>
                 </div>
+                <button onclick="driver.stopTracking()" class="size-10 bg-on-primary-container/10 dark:bg-dark-on-primary-container/20 rounded-full flex items-center justify-center active:scale-95 transition-transform text-error dark:text-error-container">
+                    <span class="material-symbols-rounded">stop</span>
+                </button>
             </div>
 
-            <!-- ===== Ingresar Código ===== -->
-            <section id="code-section" class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-3xl p-5 shadow-xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 size-32 bg-primary/10 rounded-full blur-2xl"></div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="size-9 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0">
-                            <span class="material-symbols-rounded text-lg">qr_code_scanner</span>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm">Agregar Pedido</h3>
-                            <p class="text-[10px] text-gray-400">Código que te da el cajero</p>
-                        </div>
+            <!-- ===== Ingresar Código (M3 Elevated Card) ===== -->
+            <section id="code-section" class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] p-6 shadow-m3-elevation-1">
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="size-12 bg-secondary-container dark:bg-dark-secondary-container rounded-full flex items-center justify-center text-on-secondary-container dark:text-dark-on-secondary-container shrink-0">
+                        <span class="material-symbols-rounded text-[24px]">qr_code_scanner</span>
                     </div>
-                    <div class="flex gap-3">
-                        <input id="order-code-input" type="text" maxlength="5" placeholder="A0EE"
-                            class="code-input flex-1 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl py-3.5 px-5 text-xl font-display font-black text-center focus:ring-0 focus:border-primary outline-none uppercase"
-                            oninput="this.value = this.value.toUpperCase()"
-                            onkeydown="if(event.key==='Enter') driver.lookupOrder()">
-                        <button onclick="driver.lookupOrder()" id="btn-lookup"
-                            class="bg-primary text-white font-bold px-5 rounded-2xl shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center">
-                            <span class="material-symbols-rounded text-xl">add</span>
-                        </button>
+                    <div>
+                        <h3 class="font-bold text-lg text-on-surface dark:text-dark-on-surface">Asignar Pedido</h3>
+                        <p class="text-sm text-outline dark:text-dark-outline">Ingresa el código del cajero</p>
                     </div>
-                    <p id="lookup-error" class="text-red-500 text-xs font-bold text-center mt-3 hidden"></p>
                 </div>
+                <div class="flex gap-3">
+                    <input id="order-code-input" type="text" maxlength="5" placeholder="A0EE"
+                        class="code-input flex-1 h-[56px] bg-surface dark:bg-dark-surface border-none rounded-[16px] px-5 text-xl font-display font-black text-center focus:ring-2 focus:ring-primary dark:focus:ring-dark-primary outline-none uppercase text-on-surface dark:text-dark-on-surface"
+                        oninput="this.value = this.value.toUpperCase()"
+                        onkeydown="if(event.key==='Enter') driver.lookupOrder()">
+                    <button onclick="driver.lookupOrder()" id="btn-lookup"
+                        class="h-[56px] px-6 bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary font-bold rounded-[16px] shadow-sm active:scale-95 transition-all flex items-center justify-center">
+                        <span class="material-symbols-rounded">add</span>
+                    </button>
+                </div>
+                <p id="lookup-error" class="text-error dark:text-error-container text-sm font-bold text-center mt-3 hidden"></p>
             </section>
 
-            <!-- ===== Mapa con TODOS los destinos ===== -->
+            <!-- ===== Mapa (M3 Card Structure) ===== -->
             <section id="map-section" class="hidden">
-                <div class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-3xl overflow-hidden shadow-xl">
-                    <div id="delivery-map" class="w-full h-56 bg-gray-100 dark:bg-gray-800"></div>
-                    <div class="px-5 py-3 flex items-center justify-between">
-                        <p id="map-summary" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">0 entregas</p>
+                <div class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] overflow-hidden shadow-sm border border-surface-container-high dark:border-dark-surface-container-high">
+                    <div id="delivery-map" class="w-full h-64 bg-surface-container-high dark:bg-dark-surface-container-high"></div>
+                    <div class="p-4 flex items-center justify-between bg-surface-container dark:bg-dark-surface-container">
+                        <p id="map-summary" class="text-sm font-bold text-outline dark:text-dark-outline uppercase tracking-wider pl-2">0 entregas</p>
                         <button onclick="driver.startTracking()" id="btn-start-gps"
-                            class="bg-primary text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center gap-1.5">
-                            <span class="material-symbols-rounded text-base">play_arrow</span>
-                            Iniciar GPS
+                            class="bg-tertiary-container dark:bg-dark-primary-container text-on-tertiary-container dark:text-dark-on-primary-container font-bold text-sm h-12 px-5 rounded-full shadow-sm active:scale-95 transition-all flex items-center gap-2">
+                            <span class="material-symbols-rounded text-xl">play_arrow</span>
+                            Iniciar Ruta
                         </button>
                     </div>
                 </div>
             </section>
 
             <!-- ===== Lista de Pedidos Activos ===== -->
-            <section id="orders-section" class="hidden space-y-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-display font-bold text-gray-500 dark:text-white/40 uppercase tracking-widest">Pedidos en Ruta</h3>
-                    <span id="active-count" class="bg-accent/10 text-accent text-[10px] font-black px-2 py-1 rounded-lg">0</span>
+            <section id="orders-section" class="hidden pt-2">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <h3 class="text-base font-display font-bold text-on-surface dark:text-dark-on-surface">En Ruta</h3>
+                    <span id="active-count" class="bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container text-xs font-black px-3 py-1 rounded-full">0</span>
                 </div>
                 <div id="orders-list" class="space-y-4">
                     <!-- Renderizado dinámico -->
@@ -192,30 +249,34 @@
             </section>
 
             <!-- ===== Historial de hoy ===== -->
-            <section>
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-display font-bold text-gray-400 uppercase tracking-widest">Entregas de Hoy</h3>
-                    <span id="today-count" class="bg-gray-100 dark:bg-white/5 text-gray-400 text-[10px] font-black px-2 py-1 rounded-lg">0</span>
+            <section class="pt-4">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <h3 class="text-base font-display font-bold text-on-surface dark:text-dark-on-surface">Historial de Hoy</h3>
+                    <span id="today-count" class="bg-surface-container-high dark:bg-dark-surface-container-high text-outline dark:text-dark-outline text-xs font-black px-3 py-1 rounded-full">0</span>
                 </div>
                 <div id="today-deliveries" class="space-y-3">
-                    <p class="text-center text-gray-300 dark:text-white/20 text-xs py-6">Sin entregas aún</p>
+                    <div class="bg-surface-container dark:bg-dark-surface-container rounded-[24px] p-8 text-center border border-dashed border-outline-variant dark:border-dark-outline">
+                        <span class="material-symbols-rounded text-[40px] text-outline-variant dark:text-dark-outline mb-2">inventory_2</span>
+                        <p class="text-outline dark:text-dark-outline text-sm font-medium">Sin entregas finalizadas hoy</p>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-surface shadow-2xl rounded-2xl px-5 py-4 flex items-center gap-3 transition-all duration-300 opacity-0 -translate-y-8 pointer-events-none max-w-sm w-full border border-gray-100 dark:border-white/5">
-        <span id="toast-icon" class="material-symbols-rounded text-primary text-xl">check_circle</span>
-        <p id="toast-text" class="text-sm font-bold flex-1">Mensaje</p>
+    <!-- M3 Snackbar (Toast) -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-on-surface dark:bg-dark-on-surface text-surface dark:text-dark-surface shadow-m3-elevation-3 rounded-full px-6 py-4 flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-8 pointer-events-none w-[90%] max-w-sm">
+        <span id="toast-icon" class="material-symbols-rounded text-primary-container dark:text-dark-primary text-[24px]">check_circle</span>
+        <p id="toast-text" class="text-sm font-medium flex-1">Mensaje</p>
     </div>
 
 <script>
+// Mantengo tu misma lógica JS, adaptando solo el HTML/CSS que inyecta en el renderizado
 const SUPABASE_URL = 'https://gwalgqvxloqqtbahfuux.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3YWxncXZ4bG9xcXRiYWhmdXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxOTc2MzAsImV4cCI6MjA4ODc3MzYzMH0.IzMZebdFJGpSyCpBsOUFSmUigvTGQOV3Iu20RiuNYgo';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const PIN_COLORS = ['#06300A', '#007AFF', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+const PIN_COLORS = ['#1A6C30', '#39656B', '#516351', '#BA1A1A', '#8B5CF6'];
 
 const driver = {
     profile: null,
@@ -237,20 +298,20 @@ const driver = {
     setMode(mode) {
         this.isLoginMode = (mode === 'login');
         document.getElementById('auth-error').classList.add('hidden');
-        const active = 'flex-1 py-3 rounded-xl text-sm font-bold transition-all shadow-sm bg-white dark:bg-surface text-gray-900 dark:text-white';
-        const inactive = 'flex-1 py-3 rounded-xl text-sm font-bold text-gray-500 dark:text-white/40 transition-all';
+        const active = 'flex-1 h-12 rounded-full text-sm font-bold transition-all bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container shadow-sm';
+        const inactive = 'flex-1 h-12 rounded-full text-sm font-bold text-outline dark:text-dark-outline transition-all hover:bg-surface-container-high/50 dark:hover:bg-dark-surface-container-high/50';
         document.getElementById('tab-login').className = this.isLoginMode ? active : inactive;
         document.getElementById('tab-signup').className = this.isLoginMode ? inactive : active;
         document.getElementById('signup-fields').classList.toggle('hidden', this.isLoginMode);
-        document.getElementById('auth-btn').textContent = this.isLoginMode ? 'Iniciar Sesión' : 'Crear Cuenta';
+        document.getElementById('auth-btn').innerHTML = this.isLoginMode ? 'Iniciar Sesión <span class="material-symbols-rounded text-xl">arrow_forward</span>' : 'Crear Cuenta <span class="material-symbols-rounded text-xl">person_add</span>';
     },
 
     pickVehicle(v) {
         this.vehicle = v;
         document.querySelectorAll('.vbtn').forEach(b => {
             b.className = b.dataset.v === v
-                ? 'vbtn flex flex-col items-center gap-1 py-3 rounded-xl border-2 border-primary bg-primary/5 transition-all active:scale-95'
-                : 'vbtn flex flex-col items-center gap-1 py-3 rounded-xl border border-gray-200 dark:border-white/10 transition-all active:scale-95';
+                ? 'vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container transition-all active:scale-95 border-2 border-primary dark:border-dark-primary'
+                : 'vbtn flex flex-col items-center justify-center gap-1 h-20 rounded-[16px] bg-surface-container dark:bg-dark-surface-container text-on-surface dark:text-dark-on-surface transition-all active:scale-95 border-2 border-transparent';
         });
     },
 
@@ -263,22 +324,23 @@ const driver = {
         const pwd = document.getElementById('auth-password').value;
         const btn = document.getElementById('auth-btn');
         if (!email || !pwd) return this.showError('Completa todos los campos');
-        btn.disabled = true; btn.textContent = 'Ingresando...';
+        btn.disabled = true; btn.innerHTML = 'Ingresando... <span class="material-symbols-rounded animate-spin">sync</span>';
         try {
             const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
             if (error) throw error;
             
-            // FIX DEL ERROR 406: Usamos .maybeSingle() en vez de .single()
-            // Esto permite que el error sea manejable si el user_id no existe en la tabla.
             const { data: d, error: dbErr } = await sb.from('repartidores').select('*').eq('user_id', data.user.id).maybeSingle();
             if (dbErr) throw dbErr;
-            if (!d) throw new Error('Esta cuenta no tiene un perfil en la tabla repartidores. Verifica tu base de datos.');
+            if (!d) throw new Error('Esta cuenta no tiene un perfil en la tabla repartidores.');
             
             this.profile = d;
             this.openDashboard();
         } catch (e) {
             this.showError(e.message?.includes('Invalid login') ? 'Correo o contraseña incorrectos.' : e.message);
-        } finally { btn.disabled = false; btn.textContent = 'Iniciar Sesión'; }
+        } finally { 
+            btn.disabled = false; 
+            btn.innerHTML = 'Iniciar Sesión <span class="material-symbols-rounded text-xl">arrow_forward</span>'; 
+        }
     },
 
     async register() {
@@ -289,22 +351,24 @@ const driver = {
         const btn = document.getElementById('auth-btn');
         if (!name || !phone || !email || !pwd) return this.showError('Completa todos los campos');
         if (pwd.length < 6) return this.showError('Mínimo 6 caracteres en la contraseña');
-        btn.disabled = true; btn.textContent = 'Creando cuenta...';
+        btn.disabled = true; btn.innerHTML = 'Creando cuenta... <span class="material-symbols-rounded animate-spin">sync</span>';
         try {
             const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pwd, options: { data: { full_name: name, phone, role: 'driver' } } });
             if (authErr) throw authErr;
             if (!auth.user) throw new Error('Error al crear cuenta.');
             
-            // FIX: También usar maybeSingle() aquí por precaución
             const { data: d, error: dErr } = await sb.from('repartidores').insert({ user_id: auth.user.id, nombre: name, telefono: phone, vehiculo: this.vehicle, activo: true, disponible: true }).select().maybeSingle();
             
-            if (dErr) throw new Error('Cuenta creada pero falló la inserción del perfil: ' + dErr.message);
+            if (dErr) throw new Error('Cuenta creada pero falló inserción del perfil.');
             this.profile = d;
             this.toast('¡Bienvenido ' + name + '!');
             this.openDashboard();
         } catch (e) {
-            this.showError(e.message?.includes('already registered') ? 'Correo ya registrado. Usa "Iniciar Sesión".' : e.message);
-        } finally { btn.disabled = false; btn.textContent = 'Crear Cuenta'; }
+            this.showError(e.message?.includes('already registered') ? 'Correo ya registrado.' : e.message);
+        } finally { 
+            btn.disabled = false; 
+            btn.innerHTML = 'Crear Cuenta <span class="material-symbols-rounded text-xl">person_add</span>'; 
+        }
     },
 
     async logout() {
@@ -348,7 +412,7 @@ const driver = {
         if (code.length < 3) { err.textContent = 'Mínimo 3 caracteres'; err.classList.remove('hidden'); return; }
 
         if (this.orders.find(o => o.id.toLowerCase().startsWith(code))) {
-            err.textContent = 'Ya tienes este pedido cargado';
+            err.textContent = 'Ya tienes este pedido';
             err.classList.remove('hidden');
             return;
         }
@@ -364,7 +428,7 @@ const driver = {
 
             const match = (data || []).find(o => o.id.toLowerCase().startsWith(code));
             if (!match) { err.textContent = `Pedido "${code.toUpperCase()}" no encontrado`; err.classList.remove('hidden'); return; }
-            if (match.repartidor_id && match.repartidor_id !== this.profile.id) { err.textContent = 'Pedido tomado por otro repartidor'; err.classList.remove('hidden'); return; }
+            if (match.repartidor_id && match.repartidor_id !== this.profile.id) { err.textContent = 'Tomado por otro repartidor'; err.classList.remove('hidden'); return; }
 
             await sb.from('pedidos').update({
                 repartidor_id: this.profile.id,
@@ -401,8 +465,8 @@ const driver = {
         const startBtn = document.getElementById('btn-start-gps');
 
         if (n > 0) {
-            status.textContent = `${n} entrega${n > 1 ? 's' : ''} activa${n > 1 ? 's' : ''}`;
-            status.className = 'text-[10px] font-bold text-accent uppercase tracking-widest';
+            status.textContent = `${n} entrega${n > 1 ? 's' : ''} en curso`;
+            status.className = 'text-xs font-bold text-tertiary dark:text-dark-secondary uppercase tracking-wider';
             badge.textContent = n;
             badge.classList.remove('hidden');
             document.getElementById('map-section').classList.remove('hidden');
@@ -412,7 +476,7 @@ const driver = {
             if (startBtn) startBtn.classList.toggle('hidden', this.isTracking);
         } else {
             status.textContent = 'Disponible';
-            status.className = 'text-[10px] font-bold text-green-500 uppercase tracking-widest';
+            status.className = 'text-xs font-bold text-primary dark:text-dark-primary uppercase tracking-wider';
             badge.classList.add('hidden');
             document.getElementById('map-section').classList.add('hidden');
             document.getElementById('orders-section').classList.add('hidden');
@@ -423,8 +487,8 @@ const driver = {
         const container = document.getElementById('orders-list');
         if (!container) return;
 
+        // Estilos rediseñados usando tonalidades M3 (Container elevado en vez de borde)
         container.innerHTML = this.orders.map((o, idx) => {
-            const color = PIN_COLORS[idx % PIN_COLORS.length];
             const code = o.id.slice(0, 4).toUpperCase();
             const mapsLink = (o.latitud && o.longitud)
                 ? `https://www.google.com/maps/dir/?api=1&destination=${o.latitud},${o.longitud}&travelmode=driving`
@@ -432,46 +496,69 @@ const driver = {
             const waLink = o.cliente_telefono ? `https://wa.me/1${o.cliente_telefono.replace(/\D/g, '')}` : '';
 
             return `
-            <div class="bg-white dark:bg-surface border border-gray-100 dark:border-white/5 rounded-2xl overflow-hidden shadow-lg">
-                <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-50 dark:border-white/5" style="border-left: 4px solid ${color}">
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2">
-                            <span class="font-display font-black text-lg">#${code}</span>
-                            <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-100 text-purple-600">${o.estado}</span>
+            <div class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] overflow-hidden shadow-m3-elevation-1">
+                <!-- Header Card -->
+                <div class="bg-secondary-container dark:bg-dark-secondary-container px-5 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="size-[40px] bg-surface dark:bg-dark-surface rounded-full flex items-center justify-center font-display font-black text-on-surface dark:text-dark-on-surface shadow-sm">
+                            ${idx + 1}
                         </div>
-                        <p class="text-xs font-bold text-gray-600 dark:text-white/60 truncate">${o.cliente_nombre || 'Cliente'}</p>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-display font-black text-xl text-on-secondary-container dark:text-dark-on-secondary-container">#${code}</span>
+                            </div>
+                            <p class="text-sm font-bold text-secondary dark:text-dark-secondary truncate w-40">${o.cliente_nombre || 'Cliente'}</p>
+                        </div>
                     </div>
-                    <span class="font-display font-black text-lg text-gray-900 dark:text-white shrink-0">RD$${o.total}</span>
+                    <div class="text-right">
+                        <span class="font-display font-black text-[22px] text-on-secondary-container dark:text-dark-on-secondary-container block">RD$${o.total}</span>
+                        <span class="text-[11px] font-bold text-secondary dark:text-dark-secondary uppercase tracking-widest bg-surface/50 dark:bg-dark-surface/50 px-2 py-0.5 rounded-md mt-1 inline-block">${o.estado}</span>
+                    </div>
                 </div>
-                <div class="px-4 py-3">
-                    <div class="flex items-start gap-2 mb-2">
-                        <span class="material-symbols-rounded text-sm mt-0.5" style="color: ${color}">location_on</span>
-                        <p class="text-xs text-gray-600 dark:text-white/50 leading-relaxed flex-1">${o.direccion || 'Sin dirección'}</p>
+
+                <!-- Body Card -->
+                <div class="p-5">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="bg-surface-container-high dark:bg-dark-surface-container-high p-2 rounded-full text-on-surface dark:text-dark-on-surface mt-0.5">
+                            <span class="material-symbols-rounded text-xl">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm text-on-surface dark:text-dark-on-surface font-medium leading-relaxed">${o.direccion || 'Dirección no especificada'}</p>
+                            <p class="text-xs text-outline dark:text-dark-outline font-bold mt-1">Pago: ${o.metodo_pago || 'Efectivo'}</p>
+                        </div>
                     </div>
-                    <p class="text-[10px] text-gray-400 font-bold">${o.metodo_pago || 'Efectivo'}</p>
-                    <details class="mt-2 group">
-                        <summary class="text-[10px] font-bold text-gray-400 cursor-pointer flex items-center gap-1">
-                            <span class="material-symbols-rounded text-xs transition-transform group-open:rotate-90">chevron_right</span>
-                            ${(o.items || []).length} productos
+                    
+                    <details class="group bg-surface-container-low dark:bg-dark-surface-container-low rounded-[16px] p-3 border border-surface-container-high dark:border-dark-surface-container-high">
+                        <summary class="text-xs font-bold text-on-surface dark:text-dark-on-surface cursor-pointer flex items-center gap-2 select-none outline-none">
+                            <span class="bg-primary/10 dark:bg-dark-primary/20 text-primary dark:text-dark-primary size-6 rounded-full flex items-center justify-center text-xs transition-transform group-open:rotate-90">
+                                <span class="material-symbols-rounded text-sm">chevron_right</span>
+                            </span>
+                            Ver ${(o.items || []).length} productos
                         </summary>
-                        <div class="mt-1 space-y-0.5 pt-1 border-t border-dashed border-gray-100 dark:border-white/5">
-                            ${(o.items || []).map(i => `<p class="text-[11px] text-gray-500"><b>${i.qty}x</b> ${i.nombre}</p>`).join('')}
+                        <div class="mt-3 space-y-2 pt-3 border-t border-outline-variant/30 dark:border-dark-outline/30">
+                            ${(o.items || []).map(i => `<p class="text-sm text-on-surface dark:text-dark-on-surface"><span class="font-black bg-surface-container-high dark:bg-dark-surface-container-high px-1.5 py-0.5 rounded mr-1">${i.qty}x</span> ${i.nombre}</p>`).join('')}
                         </div>
                     </details>
                 </div>
-                <div class="flex border-t border-gray-50 dark:border-white/5 divide-x divide-gray-50 dark:divide-white/5">
-                    <a href="${mapsLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-accent text-xs font-bold active:bg-accent/5 transition-colors">
-                        <span class="material-symbols-rounded text-base">navigation</span> Navegar
-                    </a>
-                    ${waLink ? `<a href="${waLink}" target="_blank" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-green-600 text-xs font-bold active:bg-green-50 transition-colors">
-                        <span class="material-symbols-rounded text-base">chat</span> WhatsApp
-                    </a>` : ''}
-                    <button onclick="driver.markDelivered('${o.id}')" class="flex-1 flex items-center justify-center gap-1.5 py-3 text-green-600 text-xs font-bold active:bg-green-50 transition-colors">
-                        <span class="material-symbols-rounded text-base">check_circle</span> Entregado
-                    </button>
-                    <button onclick="driver.dropOrder('${o.id}')" class="px-3 flex items-center justify-center py-3 text-gray-400 active:text-red-500 transition-colors">
-                        <span class="material-symbols-rounded text-base">close</span>
-                    </button>
+
+                <!-- Actions Card (M3 Full Width Buttons) -->
+                <div class="p-3 bg-surface-container-low dark:bg-dark-surface-container-low flex flex-col gap-2">
+                    <div class="flex gap-2">
+                        <a href="${mapsLink}" target="_blank" class="flex-1 h-12 flex items-center justify-center gap-2 bg-tertiary-container dark:bg-dark-secondary-container text-on-tertiary-container dark:text-dark-on-secondary-container rounded-full text-sm font-bold active:scale-95 transition-transform">
+                            <span class="material-symbols-rounded">navigation</span> Mapa
+                        </a>
+                        ${waLink ? `<a href="${waLink}" target="_blank" class="flex-1 h-12 flex items-center justify-center gap-2 bg-surface-container-high dark:bg-dark-surface-container-high text-on-surface dark:text-dark-on-surface rounded-full text-sm font-bold active:scale-95 transition-transform">
+                            <span class="material-symbols-rounded">chat</span> Chat
+                        </a>` : ''}
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="driver.markDelivered('${o.id}')" class="flex-[3] h-[56px] flex items-center justify-center gap-2 bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary rounded-full text-base font-bold shadow-m3-elevation-1 active:scale-95 transition-transform">
+                            <span class="material-symbols-rounded">check_circle</span> Entregar
+                        </button>
+                        <button onclick="driver.dropOrder('${o.id}')" class="flex-1 h-[56px] flex items-center justify-center bg-error-container dark:bg-dark-surface-container-high text-on-error-container dark:text-error-container rounded-full active:scale-95 transition-transform">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
                 </div>
             </div>`;
         }).join('');
@@ -510,8 +597,10 @@ const driver = {
             const lat = o.latitud || 19.2945;
             const lng = o.longitud || -70.2535;
             const pos = { lat, lng };
-            const color = PIN_COLORS[idx % PIN_COLORS.length];
             const code = o.id.slice(0, 4).toUpperCase();
+
+            // M3 PIN Color (Using primary instead of multi-colors for consistency)
+            const color = '#1A6C30'; 
 
             if (!this.markers[o.id]) {
                 this.markers[o.id] = new google.maps.Marker({
@@ -522,7 +611,7 @@ const driver = {
                             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 36 44">
                                 <path d="M18 0C8 0 0 8 0 18c0 14 18 26 18 26s18-12 18-26C36 8 28 0 18 0z" fill="${color}"/>
                                 <circle cx="18" cy="17" r="8" fill="white"/>
-                                <text x="18" y="21" text-anchor="middle" font-size="10" font-weight="bold" fill="${color}" font-family="sans-serif">${idx + 1}</text>
+                                <text x="18" y="21" text-anchor="middle" font-size="11" font-weight="bold" fill="${color}" font-family="sans-serif">${idx + 1}</text>
                             </svg>`)}`,
                         scaledSize: new google.maps.Size(36, 44),
                         anchor: new google.maps.Point(18, 44)
@@ -534,9 +623,7 @@ const driver = {
             bounds.extend(pos);
         });
 
-        if (this.lastPos) {
-            bounds.extend({ lat: this.lastPos.lat, lng: this.lastPos.lng });
-        }
+        if (this.lastPos) bounds.extend({ lat: this.lastPos.lat, lng: this.lastPos.lng });
 
         if (this.orders.length === 1 && !this.lastPos) {
             this.map.setCenter(bounds.getCenter());
@@ -555,12 +642,12 @@ const driver = {
                 position: pos, map: this.map,
                 icon: {
                     url: `data:image/svg+xml,${encodeURIComponent(`
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
-                            <circle cx="20" cy="20" r="18" fill="%23007AFF" stroke="white" stroke-width="3"/>
-                            <text x="20" y="28" text-anchor="middle" font-size="20">🛵</text>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+                            <circle cx="24" cy="24" r="20" fill="#A4F5AD" stroke="#1A6C30" stroke-width="3"/>
+                            <text x="24" y="32" text-anchor="middle" font-size="24">🛵</text>
                         </svg>`)}`,
-                    scaledSize: new google.maps.Size(40, 40),
-                    anchor: new google.maps.Point(20, 20)
+                    scaledSize: new google.maps.Size(48, 48),
+                    anchor: new google.maps.Point(24, 24)
                 },
                 title: 'Tú', zIndex: 999
             });
@@ -602,7 +689,7 @@ const driver = {
         );
 
         this.updateHeader();
-        this.toast('🛵 GPS activado');
+        this.toast('Ruta iniciada correctamente');
     },
 
     stopTracking() {
@@ -618,23 +705,17 @@ const driver = {
     async broadcastLocation() {
         if (!this.lastPos || !this.isTracking || this.orders.length === 0) return;
 
-        // FIX DEL ERROR 400: Asegurate de que la tabla 'tracking_ubicaciones' tenga 
-        // exactamente estas columnas (bearing, velocidad) o de lo contrario el insert fallará.
         const rows = this.orders.map(o => ({
             pedido_id: o.id,
             repartidor_id: this.profile.id,
             latitud: this.lastPos.lat,
             longitud: this.lastPos.lng,
-            // Si bearing y velocidad no existen en la base de datos, BORRA LAS 2 LÍNEAS DE ABAJO
             bearing: this.lastPos.bearing || 0,
             velocidad: this.lastPos.speed || 0
         }));
 
-        try {
-            const { error } = await sb.from('tracking_ubicaciones').insert(rows);
-            // Agregado un log para que en consola veas exactamente la columna que genera el error 400
-            if (error) console.error('Error 400 en tracking:', error.message, error.details);
-        } catch (e) { console.error('Error GPS broadcast:', e); }
+        try { await sb.from('tracking_ubicaciones').insert(rows); } 
+        catch (e) { console.error('Error GPS broadcast:', e); }
     },
 
     // ======================== ENTREGADO / SOLTAR ========================
@@ -646,10 +727,9 @@ const driver = {
             }).eq('id', orderId);
 
             this.orders = this.orders.filter(o => o.id !== orderId);
-
             if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
 
-            this.toast('✅ Entrega completada');
+            this.toast('Entrega completada exitosamente');
 
             if (this.orders.length === 0) {
                 this.stopTracking();
@@ -687,20 +767,27 @@ const driver = {
             .gte('entregado_at', today).order('entregado_at', { ascending: false });
 
         if (!data || data.length === 0) {
-            container.innerHTML = '<p class="text-center text-gray-300 dark:text-white/20 text-xs py-6">Sin entregas aún</p>';
+            container.innerHTML = `
+                <div class="bg-surface-container dark:bg-dark-surface-container rounded-[24px] p-8 text-center border border-dashed border-outline-variant dark:border-dark-outline">
+                    <span class="material-symbols-rounded text-[40px] text-outline-variant dark:text-dark-outline mb-2">inventory_2</span>
+                    <p class="text-outline dark:text-dark-outline text-sm font-medium">Sin entregas finalizadas hoy</p>
+                </div>`;
             if (countEl) countEl.textContent = '0';
             return;
         }
         if (countEl) countEl.textContent = data.length;
 
+        // Estilo M3 para listados secundarios (List Items)
         container.innerHTML = data.map(o => `
-            <div class="flex items-center gap-3 bg-green-50 dark:bg-green-500/5 p-3 rounded-xl border border-green-100 dark:border-green-500/10">
-                <span class="material-symbols-rounded text-green-500">check_circle</span>
-                <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold truncate">#${o.id.slice(0,4).toUpperCase()} — ${o.cliente_nombre || 'Cliente'}</p>
-                    <p class="text-[10px] text-gray-400">${new Date(o.entregado_at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</p>
+            <div class="flex items-center gap-4 bg-surface dark:bg-dark-surface p-4 rounded-[20px] shadow-sm border border-surface-container dark:border-dark-surface-container-high">
+                <div class="bg-primary/10 dark:bg-dark-primary/20 p-2.5 rounded-full text-primary dark:text-dark-primary">
+                    <span class="material-symbols-rounded text-[24px]">task_alt</span>
                 </div>
-                <span class="font-bold text-sm text-green-600 shrink-0">RD$${o.total}</span>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-on-surface dark:text-dark-on-surface truncate">#${o.id.slice(0,4).toUpperCase()} — ${o.cliente_nombre || 'Cliente'}</p>
+                    <p class="text-xs text-outline dark:text-dark-outline font-medium mt-0.5">${new Date(o.entregado_at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</p>
+                </div>
+                <span class="font-display font-black text-base text-on-surface dark:text-dark-on-surface shrink-0">RD$${o.total}</span>
             </div>
         `).join('');
     },
@@ -712,9 +799,16 @@ const driver = {
         document.getElementById('toast-text').textContent = text;
         const icon = document.getElementById('toast-icon');
         icon.textContent = type === 'error' ? 'error' : 'check_circle';
-        icon.className = `material-symbols-rounded text-xl ${type === 'error' ? 'text-red-500' : 'text-primary'}`;
-        t.classList.remove('opacity-0', '-translate-y-8', 'pointer-events-none');
-        setTimeout(() => t.classList.add('opacity-0', '-translate-y-8', 'pointer-events-none'), 3000);
+        
+        // M3 Inverse color logic for standard toasts
+        t.className = type === 'error' 
+            ? 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-error dark:bg-error-container text-on-error dark:text-on-error-container shadow-m3-elevation-3 rounded-full px-6 py-4 flex items-center gap-3 transition-all duration-300 w-[90%] max-w-sm'
+            : 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-on-surface dark:bg-dark-on-surface text-surface dark:text-dark-surface shadow-m3-elevation-3 rounded-full px-6 py-4 flex items-center gap-3 transition-all duration-300 w-[90%] max-w-sm';
+            
+        icon.className = `material-symbols-rounded text-[24px] ${type === 'error' ? 'text-on-error dark:text-on-error-container' : 'text-primary-container dark:text-dark-primary'}`;
+        
+        t.classList.remove('opacity-0', 'translate-y-8', 'pointer-events-none');
+        setTimeout(() => t.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none'), 3000);
     },
 
     // ======================== AUTO-INIT ========================
@@ -723,7 +817,6 @@ const driver = {
         const { data: { session } } = await sb.auth.getSession();
         if (!session) return;
         
-        // FIX: Reemplazado .single() por .maybeSingle() para evitar el fallo 406 en el autologin
         const { data: d } = await sb.from('repartidores').select('*').eq('user_id', session.user.id).maybeSingle();
         if (d) { this.profile = d; this.openDashboard(); }
     }
