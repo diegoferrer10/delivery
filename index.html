@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
-    <!-- Añadimos padding inferior para la barra de inicio de iOS (safe-area) -->
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -24,7 +23,6 @@
             theme: {
                 extend: {
                     colors: {
-                        /* MATERIAL 3 EXPRESSIVE TONAL PALETTE (Green Base) */
                         "primary": "#1A6C30",
                         "on-primary": "#FFFFFF",
                         "primary-container": "#A4F5AD",
@@ -45,8 +43,6 @@
                         "surface-container-high": "#E6E9E2",
                         "outline": "#72796F",
                         "outline-variant": "#C1C9BE",
-                        
-                        /* Dark Mode Equivalents */
                         "dark-primary": "#89D893",
                         "dark-on-primary": "#003912",
                         "dark-primary-container": "#00521C",
@@ -85,12 +81,9 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
-        
-        /* Material Symbols Fill adjustments */
         .material-symbols-rounded {
           font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-
         .code-input { letter-spacing: 0.3em; text-transform: uppercase; font-family: 'Bricolage Grotesque', sans-serif; }
     </style>
 </head>
@@ -100,7 +93,7 @@
     <!-- ==================== PANTALLA 1: AUTH ==================== -->
     <div id="screen-auth" class="min-h-[100dvh] flex flex-col items-center justify-center p-6">
         <div class="w-full max-w-sm">
-            
+
             <div class="text-center mb-10 flex flex-col items-center">
                 <div class="size-[72px] bg-primary-container dark:bg-dark-primary-container rounded-[24px] flex items-center justify-center mb-6 shadow-m3-elevation-1">
                     <span class="material-symbols-rounded text-on-primary-container dark:text-dark-on-primary-container text-[40px]">delivery_dining</span>
@@ -117,22 +110,20 @@
 
             <div class="space-y-4">
                 <div id="signup-fields" class="hidden space-y-4">
-                    <!-- Nombre -->
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                             <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">badge</span>
                         </div>
                         <input id="reg-name" type="text" placeholder="Nombre completo" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
                     </div>
-                    
-                    <!-- Teléfono -->
+
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                             <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">call</span>
                         </div>
                         <input id="reg-phone" type="tel" placeholder="Teléfono (ej: 809 555 1234)" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
                     </div>
-                    
+
                     <div class="pt-2">
                         <p class="text-xs font-bold text-outline dark:text-dark-outline uppercase tracking-wider mb-3 ml-2">Tipo de Vehículo</p>
                         <div class="grid grid-cols-4 gap-3">
@@ -151,23 +142,21 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Correo -->
+
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                         <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">mail</span>
                     </div>
                     <input id="auth-email" type="email" placeholder="Correo electrónico" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
                 </div>
-                
-                <!-- Contraseña -->
+
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                         <span class="material-symbols-rounded text-[22px] text-outline dark:text-dark-outline">lock</span>
                     </div>
                     <input id="auth-password" type="password" placeholder="Contraseña" class="w-full h-[56px] bg-surface-container-high dark:bg-dark-surface-container-high border border-transparent rounded-[16px] pl-12 pr-4 text-base font-medium text-on-surface dark:text-dark-on-surface transition-all focus:ring-0 focus:border-2 focus:border-primary dark:focus:border-dark-primary focus:bg-surface dark:focus:bg-dark-surface outline-none placeholder:text-outline dark:placeholder:text-dark-outline">
                 </div>
-                
+
                 <div class="pt-4">
                     <button onclick="driver.submitAuth()" id="auth-btn" class="w-full h-[56px] bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary font-bold rounded-full shadow-m3-elevation-1 active:scale-95 transition-all text-base flex items-center justify-center gap-2">
                         Iniciar Sesión
@@ -182,7 +171,6 @@
     <!-- ==================== PANTALLA 2: DASHBOARD ==================== -->
     <div id="screen-dashboard" class="hidden min-h-[100dvh] flex flex-col pb-10">
 
-        <!-- M3 Large Top App Bar (Simulated) -->
         <header class="bg-surface dark:bg-dark-surface sticky top-0 z-40 transition-shadow" id="app-bar">
             <div class="max-w-lg mx-auto px-6 pt-6 pb-4 flex items-center justify-between">
                 <div>
@@ -203,7 +191,6 @@
 
         <main class="flex-1 max-w-lg mx-auto w-full px-6 py-2 space-y-6">
 
-            <!-- GPS Banner (M3 Primary Container) -->
             <div id="gps-banner" class="hidden bg-primary-container dark:bg-dark-primary-container text-on-primary-container dark:text-dark-on-primary-container px-5 py-4 rounded-[24px] flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
                     <div class="bg-primary/10 dark:bg-white/20 p-2 rounded-full">
@@ -219,7 +206,6 @@
                 </button>
             </div>
 
-            <!-- ===== Ingresar Código (M3 Elevated Card) ===== -->
             <section id="code-section" class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] p-6 shadow-m3-elevation-1">
                 <div class="flex items-center gap-4 mb-5">
                     <div class="size-12 bg-secondary-container dark:bg-dark-secondary-container rounded-full flex items-center justify-center text-on-secondary-container dark:text-dark-on-secondary-container shrink-0">
@@ -243,7 +229,6 @@
                 <p id="lookup-error" class="text-error dark:text-error-container text-sm font-bold text-center mt-3 hidden"></p>
             </section>
 
-            <!-- ===== Mapa (M3 Card Structure) ===== -->
             <section id="map-section" class="hidden">
                 <div class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] overflow-hidden shadow-sm border border-surface-container-high dark:border-dark-surface-container-high">
                     <div id="delivery-map" class="w-full h-64 bg-surface-container-high dark:bg-dark-surface-container-high"></div>
@@ -258,18 +243,14 @@
                 </div>
             </section>
 
-            <!-- ===== Lista de Pedidos Activos ===== -->
             <section id="orders-section" class="hidden pt-2">
                 <div class="flex items-center justify-between mb-4 px-2">
                     <h3 class="text-base font-display font-bold text-on-surface dark:text-dark-on-surface">En Ruta</h3>
                     <span id="active-count" class="bg-secondary-container dark:bg-dark-secondary-container text-on-secondary-container dark:text-dark-on-secondary-container text-xs font-black px-3 py-1 rounded-full">0</span>
                 </div>
-                <div id="orders-list" class="space-y-4">
-                    <!-- Renderizado dinámico -->
-                </div>
+                <div id="orders-list" class="space-y-4"></div>
             </section>
 
-            <!-- ===== Historial de hoy ===== -->
             <section class="pt-4">
                 <div class="flex items-center justify-between mb-4 px-2">
                     <h3 class="text-base font-display font-bold text-on-surface dark:text-dark-on-surface">Historial de Hoy</h3>
@@ -292,27 +273,27 @@
     </div>
 
 <script>
-// Mantengo tu misma lógica JS, adaptando solo el HTML/CSS que inyecta en el renderizado
 const SUPABASE_URL = 'https://gwalgqvxloqqtbahfuux.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3YWxncXZ4bG9xcXRiYWhmdXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxOTc2MzAsImV4cCI6MjA4ODc3MzYzMH0.IzMZebdFJGpSyCpBsOUFSmUigvTGQOV3Iu20RiuNYgo';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const PIN_COLORS = ['#1A6C30', '#39656B', '#516351', '#BA1A1A', '#8B5CF6'];
-
 const driver = {
     profile: null,
-    orders: [],             
+    orders: [],
     isTracking: false,
     watchId: null,
     sendInterval: null,
     timerInterval: null,
     timerStart: null,
     lastPos: null,
+    lastBroadcastTime: 0,
     map: null,
-    markers: {},            
+    markers: {},
     driverMarker: null,
     isLoginMode: true,
     vehicle: 'moto',
+    wakeLock: null,
+    isBroadcasting: false,
 
     // ======================== AUTH ========================
 
@@ -349,18 +330,18 @@ const driver = {
         try {
             const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
             if (error) throw error;
-            
+
             const { data: d, error: dbErr } = await sb.from('repartidores').select('*').eq('user_id', data.user.id).maybeSingle();
             if (dbErr) throw dbErr;
             if (!d) throw new Error('Esta cuenta no tiene un perfil en la tabla repartidores.');
-            
+
             this.profile = d;
             this.openDashboard();
         } catch (e) {
             this.showError(e.message?.includes('Invalid login') ? 'Correo o contraseña incorrectos.' : e.message);
-        } finally { 
-            btn.disabled = false; 
-            btn.innerHTML = 'Iniciar Sesión <span class="material-symbols-rounded text-xl">arrow_forward</span>'; 
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Iniciar Sesión <span class="material-symbols-rounded text-xl">arrow_forward</span>';
         }
     },
 
@@ -377,23 +358,24 @@ const driver = {
             const { data: auth, error: authErr } = await sb.auth.signUp({ email, password: pwd, options: { data: { full_name: name, phone, role: 'driver' } } });
             if (authErr) throw authErr;
             if (!auth.user) throw new Error('Error al crear cuenta.');
-            
+
             const { data: d, error: dErr } = await sb.from('repartidores').insert({ user_id: auth.user.id, nombre: name, telefono: phone, vehiculo: this.vehicle, activo: true, disponible: true }).select().maybeSingle();
-            
+
             if (dErr) throw new Error('Cuenta creada pero falló inserción del perfil.');
             this.profile = d;
             this.toast('¡Bienvenido ' + name + '!');
             this.openDashboard();
         } catch (e) {
             this.showError(e.message?.includes('already registered') ? 'Correo ya registrado.' : e.message);
-        } finally { 
-            btn.disabled = false; 
-            btn.innerHTML = 'Crear Cuenta <span class="material-symbols-rounded text-xl">person_add</span>'; 
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Crear Cuenta <span class="material-symbols-rounded text-xl">person_add</span>';
         }
     },
 
     async logout() {
         this.stopTracking();
+        await sb.from('repartidores').update({ disponible: false }).eq('id', this.profile.id).catch(() => {});
         await sb.auth.signOut();
         this.profile = null; this.orders = [];
         document.getElementById('screen-auth').classList.remove('hidden');
@@ -409,6 +391,16 @@ const driver = {
         document.getElementById('driver-name').textContent = this.profile.nombre;
         this.loadActiveOrders();
         this.loadTodayDeliveries();
+        this.setupVisibilityHandler();
+    },
+
+    setupVisibilityHandler() {
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && this.isTracking) {
+                this.broadcastLocation();
+                this.requestWakeLock();
+            }
+        });
     },
 
     async loadActiveOrders() {
@@ -508,7 +500,6 @@ const driver = {
         const container = document.getElementById('orders-list');
         if (!container) return;
 
-        // Estilos rediseñados usando tonalidades M3 (Container elevado en vez de borde)
         container.innerHTML = this.orders.map((o, idx) => {
             const code = o.id.slice(0, 4).toUpperCase();
             const mapsLink = (o.latitud && o.longitud)
@@ -518,7 +509,6 @@ const driver = {
 
             return `
             <div class="bg-surface-container dark:bg-dark-surface-container rounded-[28px] overflow-hidden shadow-m3-elevation-1">
-                <!-- Header Card -->
                 <div class="bg-secondary-container dark:bg-dark-secondary-container px-5 py-4 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="size-[40px] bg-surface dark:bg-dark-surface rounded-full flex items-center justify-center font-display font-black text-on-surface dark:text-dark-on-surface shadow-sm">
@@ -537,7 +527,6 @@ const driver = {
                     </div>
                 </div>
 
-                <!-- Body Card -->
                 <div class="p-5">
                     <div class="flex items-start gap-3 mb-4">
                         <div class="bg-surface-container-high dark:bg-dark-surface-container-high p-2 rounded-full text-on-surface dark:text-dark-on-surface mt-0.5">
@@ -548,7 +537,7 @@ const driver = {
                             <p class="text-xs text-outline dark:text-dark-outline font-bold mt-1">Pago: ${o.metodo_pago || 'Efectivo'}</p>
                         </div>
                     </div>
-                    
+
                     <details class="group bg-surface-container-low dark:bg-dark-surface-container-low rounded-[16px] p-3 border border-surface-container-high dark:border-dark-surface-container-high">
                         <summary class="text-xs font-bold text-on-surface dark:text-dark-on-surface cursor-pointer flex items-center gap-2 select-none outline-none">
                             <span class="bg-primary/10 dark:bg-dark-primary/20 text-primary dark:text-dark-primary size-6 rounded-full flex items-center justify-center text-xs transition-transform group-open:rotate-90">
@@ -562,7 +551,6 @@ const driver = {
                     </details>
                 </div>
 
-                <!-- Actions Card (M3 Full Width Buttons) -->
                 <div class="p-3 bg-surface-container-low dark:bg-dark-surface-container-low flex flex-col gap-2">
                     <div class="flex gap-2">
                         <a href="${mapsLink}" target="_blank" class="flex-1 h-12 flex items-center justify-center gap-2 bg-tertiary-container dark:bg-dark-secondary-container text-on-tertiary-container dark:text-dark-on-secondary-container rounded-full text-sm font-bold active:scale-95 transition-transform">
@@ -573,10 +561,10 @@ const driver = {
                         </a>` : ''}
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="driver.markDelivered('${o.id}')" class="flex-[3] h-[56px] flex items-center justify-center gap-2 bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary rounded-full text-base font-bold shadow-m3-elevation-1 active:scale-95 transition-transform">
+                        <button onclick="driver.confirmDelivery('${o.id}', '${code}')" class="flex-[3] h-[56px] flex items-center justify-center gap-2 bg-primary dark:bg-dark-primary text-on-primary dark:text-dark-on-primary rounded-full text-base font-bold shadow-m3-elevation-1 active:scale-95 transition-transform">
                             <span class="material-symbols-rounded">check_circle</span> Entregar
                         </button>
-                        <button onclick="driver.dropOrder('${o.id}')" class="flex-1 h-[56px] flex items-center justify-center bg-error-container dark:bg-dark-surface-container-high text-on-error-container dark:text-error-container rounded-full active:scale-95 transition-transform">
+                        <button onclick="driver.confirmDrop('${o.id}', '${code}')" class="flex-1 h-[56px] flex items-center justify-center bg-error-container dark:bg-dark-surface-container-high text-on-error-container dark:text-error-container rounded-full active:scale-95 transition-transform">
                             <span class="material-symbols-rounded">close</span>
                         </button>
                     </div>
@@ -613,15 +601,12 @@ const driver = {
         });
 
         const bounds = new google.maps.LatLngBounds();
+        const color = '#1A6C30';
 
         this.orders.forEach((o, idx) => {
             const lat = o.latitud || 19.2945;
             const lng = o.longitud || -70.2535;
             const pos = { lat, lng };
-            const code = o.id.slice(0, 4).toUpperCase();
-
-            // M3 PIN Color (Using primary instead of multi-colors for consistency)
-            const color = '#1A6C30'; 
 
             if (!this.markers[o.id]) {
                 this.markers[o.id] = new google.maps.Marker({
@@ -637,7 +622,7 @@ const driver = {
                         scaledSize: new google.maps.Size(36, 44),
                         anchor: new google.maps.Point(18, 44)
                     },
-                    title: `#${code} — ${o.cliente_nombre || 'Cliente'}`
+                    title: `#${o.id.slice(0,4).toUpperCase()} — ${o.cliente_nombre || 'Cliente'}`
                 });
             }
 
@@ -679,6 +664,23 @@ const driver = {
 
     // ======================== GPS TRACKING ========================
 
+    async requestWakeLock() {
+        if (this.wakeLock) return;
+        try {
+            if ('wakeLock' in navigator) {
+                this.wakeLock = await navigator.wakeLock.request('screen');
+                this.wakeLock.addEventListener('release', () => { this.wakeLock = null; });
+            }
+        } catch (e) { /* Wake Lock not supported or denied */ }
+    },
+
+    releaseWakeLock() {
+        if (this.wakeLock) {
+            this.wakeLock.release().catch(() => {});
+            this.wakeLock = null;
+        }
+    },
+
     startTracking() {
         if (this.orders.length === 0) return this.toast('No hay pedidos', 'error');
         if (!navigator.geolocation) return this.toast('GPS no disponible', 'error');
@@ -686,6 +688,7 @@ const driver = {
 
         this.isTracking = true;
         document.getElementById('gps-banner').classList.remove('hidden');
+        this.requestWakeLock();
 
         this.timerStart = Date.now();
         this.timerInterval = setInterval(() => {
@@ -695,22 +698,40 @@ const driver = {
 
         this.watchId = navigator.geolocation.watchPosition(
             pos => {
-                this.lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude, bearing: pos.coords.heading || 0, speed: pos.coords.speed ? pos.coords.speed * 3.6 : 0 };
+                this.lastPos = {
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude,
+                    bearing: pos.coords.heading || 0,
+                    speed: pos.coords.speed ? pos.coords.speed * 3.6 : 0
+                };
                 this.updateDriverOnMap();
+
+                const now = Date.now();
+                if (now - this.lastBroadcastTime >= 5000) {
+                    this.lastBroadcastTime = now;
+                    this.broadcastLocation();
+                }
             },
-            err => { if (err.code === 1) { this.toast('Permiso GPS denegado', 'error'); this.stopTracking(); } },
+            err => {
+                if (err.code === 1) { this.toast('Permiso GPS denegado', 'error'); this.stopTracking(); }
+                else if (err.code === 3) { console.warn('GPS timeout, retrying...'); }
+            },
             { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 }
         );
 
         this.sendInterval = setInterval(() => this.broadcastLocation(), 6000);
 
         navigator.geolocation.getCurrentPosition(
-            pos => { this.lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude, bearing: 0, speed: 0 }; this.broadcastLocation(); this.updateDriverOnMap(); },
+            pos => {
+                this.lastPos = { lat: pos.coords.latitude, lng: pos.coords.longitude, bearing: 0, speed: 0 };
+                this.broadcastLocation();
+                this.updateDriverOnMap();
+            },
             () => {}, { enableHighAccuracy: true }
         );
 
         this.updateHeader();
-        this.toast('Ruta iniciada correctamente');
+        this.toast('Ruta iniciada — GPS activo');
     },
 
     stopTracking() {
@@ -720,11 +741,14 @@ const driver = {
         if (this.timerInterval) { clearInterval(this.timerInterval); this.timerInterval = null; }
         document.getElementById('gps-banner').classList.add('hidden');
         if (this.driverMarker) { this.driverMarker.setMap(null); this.driverMarker = null; }
+        this.releaseWakeLock();
         this.updateHeader();
     },
 
     async broadcastLocation() {
         if (!this.lastPos || !this.isTracking || this.orders.length === 0) return;
+        if (this.isBroadcasting) return;
+        this.isBroadcasting = true;
 
         const rows = this.orders.map(o => ({
             pedido_id: o.id,
@@ -735,11 +759,35 @@ const driver = {
             velocidad: this.lastPos.speed || 0
         }));
 
-        try { await sb.from('tracking_ubicaciones').insert(rows); } 
-        catch (e) { console.error('Error GPS broadcast:', e); }
+        try {
+            await Promise.all([
+                sb.from('tracking_ubicaciones').insert(rows),
+                sb.from('repartidores').update({
+                    ultima_latitud: this.lastPos.lat,
+                    ultima_longitud: this.lastPos.lng,
+                    ultima_ubicacion_at: new Date().toISOString()
+                }).eq('id', this.profile.id)
+            ]);
+        } catch (e) {
+            console.error('Error GPS broadcast:', e);
+        } finally {
+            this.isBroadcasting = false;
+        }
     },
 
     // ======================== ENTREGADO / SOLTAR ========================
+
+    confirmDelivery(orderId, code) {
+        if (confirm(`¿Confirmar entrega del pedido #${code}?`)) {
+            this.markDelivered(orderId);
+        }
+    },
+
+    confirmDrop(orderId, code) {
+        if (confirm(`¿Soltar pedido #${code}? Volverá a estar disponible.`)) {
+            this.dropOrder(orderId);
+        }
+    },
 
     async markDelivered(orderId) {
         try {
@@ -750,7 +798,7 @@ const driver = {
             this.orders = this.orders.filter(o => o.id !== orderId);
             if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
 
-            this.toast('Entrega completada exitosamente');
+            this.toast('Entrega completada');
 
             if (this.orders.length === 0) {
                 this.stopTracking();
@@ -763,17 +811,19 @@ const driver = {
     },
 
     async dropOrder(orderId) {
-        await sb.from('pedidos').update({
-            estado: 'listo', repartidor_id: null, tracking_activo: false
-        }).eq('id', orderId);
+        try {
+            await sb.from('pedidos').update({
+                estado: 'listo', repartidor_id: null, tracking_activo: false
+            }).eq('id', orderId);
 
-        this.orders = this.orders.filter(o => o.id !== orderId);
-        if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
+            this.orders = this.orders.filter(o => o.id !== orderId);
+            if (this.markers[orderId]) { this.markers[orderId].setMap(null); delete this.markers[orderId]; }
 
-        if (this.orders.length === 0) this.stopTracking();
+            if (this.orders.length === 0) this.stopTracking();
 
-        this.renderAll();
-        this.toast('Pedido liberado');
+            this.renderAll();
+            this.toast('Pedido liberado');
+        } catch (e) { console.error(e); this.toast('Error al liberar', 'error'); }
     },
 
     // ======================== HISTORIAL ========================
@@ -798,7 +848,6 @@ const driver = {
         }
         if (countEl) countEl.textContent = data.length;
 
-        // Estilo M3 para listados secundarios (List Items)
         container.innerHTML = data.map(o => `
             <div class="flex items-center gap-4 bg-surface dark:bg-dark-surface p-4 rounded-[20px] shadow-sm border border-surface-container dark:border-dark-surface-container-high">
                 <div class="bg-primary/10 dark:bg-dark-primary/20 p-2.5 rounded-full text-primary dark:text-dark-primary">
@@ -820,16 +869,16 @@ const driver = {
         document.getElementById('toast-text').textContent = text;
         const icon = document.getElementById('toast-icon');
         icon.textContent = type === 'error' ? 'error' : 'check_circle';
-        
-        // M3 Inverse color logic for standard toasts
-        t.className = type === 'error' 
+
+        t.className = type === 'error'
             ? 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-error dark:bg-error-container text-on-error dark:text-on-error-container shadow-m3-elevation-3 rounded-full px-6 py-4 flex items-center gap-3 transition-all duration-300 w-[90%] max-w-sm'
             : 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-on-surface dark:bg-dark-on-surface text-surface dark:text-dark-surface shadow-m3-elevation-3 rounded-full px-6 py-4 flex items-center gap-3 transition-all duration-300 w-[90%] max-w-sm';
-            
+
         icon.className = `material-symbols-rounded text-[24px] ${type === 'error' ? 'text-on-error dark:text-on-error-container' : 'text-primary-container dark:text-dark-primary'}`;
-        
+
         t.classList.remove('opacity-0', 'translate-y-8', 'pointer-events-none');
-        setTimeout(() => t.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none'), 3000);
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => t.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none'), 3000);
     },
 
     // ======================== AUTO-INIT ========================
@@ -837,7 +886,7 @@ const driver = {
     async init() {
         const { data: { session } } = await sb.auth.getSession();
         if (!session) return;
-        
+
         const { data: d } = await sb.from('repartidores').select('*').eq('user_id', session.user.id).maybeSingle();
         if (d) { this.profile = d; this.openDashboard(); }
     }
